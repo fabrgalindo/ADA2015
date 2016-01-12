@@ -1,0 +1,218 @@
+---
+title: "UNIDAD PROFESIONAL INTERDISCIPLINARIA  DE INGENIERÍA  Y CIENCIAS SOCIALES ADMINISTRATIVAS"
+author: "Fabián Ramírez Galindo"
+date: "11 de enero de 2016"
+output: html_document
+---
+##Tarea 7##
+
+###Datos### 
+**Se trabajara con el conjunto de datos obtenido en la tarea 6.**  
+Los datos corresponden a la base de datos de eventos de tormentas (Storm Events Database).
+Se tomaron los datos del periodo 2000 a 2009.
+StormEvents_fatalities-ftp_v1.0_d2000_c20150826.csv  	
+StormEvents_fatalities-ftp_v1.0_d2001_c20150826.csv  	
+StormEvents_fatalities-ftp_v1.0_d2002_c20150826.csv  	
+StormEvents_fatalities-ftp_v1.0_d2003_c20150826.csv  	
+StormEvents_fatalities-ftp_v1.0_d2004_c20150826.csv  	
+StormEvents_fatalities-ftp_v1.0_d2005_c20150826.csv  	
+StormEvents_fatalities-ftp_v1.0_d2006_c20151230.csv  	
+StormEvents_fatalities-ftp_v1.0_d2007_c20151120.csv  	
+StormEvents_fatalities-ftp_v1.0_d2008_c20150826.csv  	
+StormEvents_fatalities-ftp_v1.0_d2009_c20151120.csv  
+
+```{r include=FALSE}
+library(knitr)
+```
+```{r, echo=FALSE}
+setwd("C:/repoGit/ADA2015/Lectura")
+```
+```{r, echo=FALSE}
+# Todos los archivos se fusionan en la estructura de datos Fatalities
+Fatalities<-read.csv("StormEvents_fatalities-ftp_v1.0_d2000_c20150826.csv", header=T, sep=",", na.strings="")
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2001_c20150826.csv", header=T, sep=",", na.strings="")
+```
+```{r, echo=FALSE}
+Fatalities<-rbind(Fatalities,data)
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2002_c20150826.csv", header=T, sep=",", na.strings="")
+```
+```{r, echo=FALSE}
+Fatalities<-rbind(Fatalities,data)
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2003_c20150826.csv", header=T, sep=",", na.strings="")
+Fatalities<-rbind(Fatalities,data)
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2004_c20150826.csv", header=T, sep=",", na.strings="")
+Fatalities<-rbind(Fatalities,data)
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2005_c20150826.csv", header=T, sep=",", na.strings="")
+Fatalities<-rbind(Fatalities,data)
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2006_c20151230.csv", header=T, sep=",", na.strings="")
+Fatalities<-rbind(Fatalities,data)
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2007_c20151120.csv", header=T, sep=",", na.strings="")
+Fatalities<-rbind(Fatalities,data)
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2008_c20150826.csv", header=T, sep=",", na.strings="")
+Fatalities<-rbind(Fatalities,data)
+```
+```{r, echo=FALSE}
+data<-read.csv("StormEvents_fatalities-ftp_v1.0_d2009_c20151120.csv", header=T, sep=",", na.strings="")
+Fatalities<-rbind(Fatalities,data)
+```
+
+
+###Sinopsis###
+En esta tarea se realizará el análisis de mortalidad por generado ocurrido en el periodo del 2000 a 2009. Se realizara un análisis por genero tomando la muestra de las muertes ocurridas en casa. En este caso nos centraremos en el mes de Septiembre del 2004.
+
+###Desarrollo###
+Las columnas del conjunto de datos **Fatalities** son:
+```{r, echo=FALSE}
+names(Fatalities)
+```
+
+
+El número de registros del conjunto de datos son:
+```{r}
+nrow(Fatalities)
+```
+
+Resumen del conjunto de datos **Fatalities**.
+```{r}
+summary(Fatalities)
+```
+
+
+Subconjunto sexo femenino del conjunto total de muertes en el periodo del 2000 a 2009.
+```{r}
+siteF <- unique(subset(Fatalities, FATALITY_SEX == "F", c(FAT_YEARMONTH, FAT_DAY,FAT_TIME,FATALITY_ID,EVENT_ID,FATALITY_TYPE,FATALITY_DATE,FATALITY_AGE,FATALITY_SEX,FATALITY_LOCATION,EVENT_YEARMONTH)))
+```
+
+
+Subconjunto sexo masculino del conjunto total de muertes en el periodo del 2000 a 2009.
+```{r}
+siteM <- unique(subset(Fatalities, FATALITY_SEX == "M", c(FAT_YEARMONTH, FAT_DAY,FAT_TIME,FATALITY_ID,EVENT_ID,FATALITY_TYPE,FATALITY_DATE,FATALITY_AGE,FATALITY_SEX,FATALITY_LOCATION,EVENT_YEARMONTH)))
+```
+
+Muertes del sexo femenino presentadas en casa.
+```{r}
+site0 <- unique(subset(siteF, FATALITY_LOCATION == "Permanent Home", c(FAT_YEARMONTH, FAT_DAY)))
+```
+
+Muertes del sexo masculino presentadas en casa.
+```{r}
+site1 <- unique(subset(siteM, FATALITY_LOCATION == "Permanent Home", c(FAT_YEARMONTH, FAT_DAY)))
+```
+
+
+```{r}
+site0 <- paste(site0[,1], site0[,2], sep = ".")
+site1 <- paste(site1[,1], site1[,2], sep = ".")
+```
+
+
+```{r}
+str(site0)
+```
+
+```{r}
+str(site1)
+```
+
+Intersección de muertes masculinas y femeninas presentadas en la misma fecha.
+```{r}
+both <- intersect(site0, site1)
+print(both)
+```
+
+```{r}
+siteF$Fatdate<- with(siteF, paste(FAT_YEARMONTH, FAT_DAY, sep = "."))
+siteM$Fatdate <- with(siteM, paste(FAT_YEARMONTH, FAT_DAY, sep = "."))
+```
+
+
+```{r}
+cnt0 <- subset(siteF, FATALITY_LOCATION == "Permanent Home" & Fatdate%in% both)
+cnt1 <- subset(siteM, FATALITY_LOCATION == "Permanent Home" & Fatdate%in% both)
+```
+
+
+```{r}
+sapply(split(cnt0, cnt0$Fatdate), nrow)
+sapply(split(cnt1, cnt1$Fatdate), nrow)
+```
+
+Se obtendra el número de muertes ocurridas en Septiembre del 2004.
+```{r}
+both.FAT_YEARMONTH<-200409
+```
+
+
+```{r}
+siteFsub <- subset(siteF, FATALITY_LOCATION == "Permanent Home" & FAT_YEARMONTH == both.FAT_YEARMONTH)
+siteMsub <- subset(siteM, FATALITY_LOCATION == "Permanent Home" & FAT_YEARMONTH == both.FAT_YEARMONTH)
+
+```
+
+
+Las edades de las mujeres fallecidas son:
+```{r}
+AgeF<- as.character(siteFsub$FATALITY_AGE)
+print(AgeF)
+```
+
+Las edades de los hombres fallecidos son:
+```{r}
+AgeM<- as.character(siteMsub$FATALITY_AGE)
+print(AgeM)
+```
+
+```{r}
+xFsub <- siteFsub$FAT_DAY
+xMsub <- siteMsub$FAT_DAY
+
+```
+
+Obtener el valor mínimo y máximo de los dos conjuntos
+```{r}
+rng <- range(xFsub, xMsub, na.rm = T)
+```
+
+Gráfica de datos de muertes de mujeres. 
+```{r}
+plot(AgeF, xFsub, pch = 20, ylim = rng, xlab = "Age", ylab = "Day")
+abline(h = median(xFsub, na.rm = T))
+
+```
+
+Gráfica de datos de muertes de hombres
+```{r}
+plot(AgeM, xMsub, pch = 20, ylim = rng, xlab = "Age", ylab = "Day")
+abline(h = median(xMsub, na.rm = T))
+
+```
+
+
+###Conclusiones###
+Con base a los resultados obtenidos que ocurrieron  15 muertes de mujeres con edades entre 3 y 81 años y la muerte de 11 hombres con edades entre 35 y 86 años en el mes de Septiembre del 2004.  
+
+Las muertes de las mujeres ocurrieron entre el día 6 y el 27 de Septiembre, mientras que las muertes de los hombres ocurrieron entre el 5 y el 18 de septiembre.
+
+###Bibliografía ###
+[1] Markdown & Pygments Lexers Cheat Sheet
+http://joedicastro.com/pages/markdown.html
+
+[2] National Centers for Environmental Information
+http://www.ncdc.noaa.gov/stormevents
+
