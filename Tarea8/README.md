@@ -4,8 +4,9 @@
 
 ## Maestría en Ciencias en Informática
 
-### Curso de
 ### Almacenamiento de Datos y su Administración
+
+### Fabián Ramírez Galindo
 
 ### Tarea 8
 ### Elementos Avanzados de R
