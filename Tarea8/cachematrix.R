@@ -20,7 +20,7 @@ makeCacheMatrix <- function(x = numeric()) {
 cachesolve <- function(x, ...) {
   m <- x$getsolve()
   if(!is.null(m)) {
-    message("El valor ya ha sido calculado y retenido ???en el cach?????")
+    message("El valor ya ha sido calculado y retenido en el cache")
     return(m)
   }
   data <- x$get()
